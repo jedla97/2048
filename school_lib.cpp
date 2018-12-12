@@ -37,6 +37,8 @@ void setCursorPosition(int x, int y) {
 }
 
 //Tisk matice + nastaveni barev v konzoli
+//switch from null matrix always show actual matrix
+//edit every value have different color
 void printMatrix(int **matrix, int m, int n) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
@@ -48,23 +50,93 @@ void printMatrix(int **matrix, int m, int n) {
 	char *matrixString = new char[stringSize];
 
 	printf("\n");
-	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
+	SetConsoleTextAttribute(hConsole, 0x000f);
 	for (int i = 0; i < m; i++)
 	{
-		printf(" |");
+		printf("	|");
 		for (int j = 0; j < n; j++)
 		{
-			if (matrix[i][j] == 0) {
-				printf(" |");
-			}
-			else {
-				SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-				printf("O");
-				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
+				if (matrix[i][j] < 10)
+				{
+					if (matrix[i][j] == 0)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000f);
+						printf(" %d  ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 2)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000e);
+						printf(" %d  ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 4)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000d);
+						printf(" %d  ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 8)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000c);
+						printf(" %d  ", matrix[i][j]);
+					}
+					
+					
+				}
+				else if (matrix[i][j] > 10 && matrix[i][j] < 100)
+				{
+					if (matrix[i][j] == 16)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000b);
+						printf(" %d ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 32)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000a);
+						printf(" %d ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 64)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000e);
+						printf(" %d ", matrix[i][j]);
+					}
+					
+					
+				}
+				else if (matrix[i][j] > 100 && matrix[i][j] < 1000)
+				{
+					if (matrix[i][j] == 128)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000d);
+						printf("%d ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 256)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000c);
+						printf("%d ", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 512)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000b);
+						printf("%d ", matrix[i][j]);
+					}
+					
+				}
+				else
+				{
+					if (matrix[i][j] == 1024)
+					{
+						SetConsoleTextAttribute(hConsole, 0x000a);
+						printf("%d", matrix[i][j]);
+					}
+					else if (matrix[i][j] == 2048)
+					{
+						SetConsoleTextAttribute(hConsole, 0x0009);
+						printf("%d", matrix[i][j]);
+					}
+					
+				}
+				SetConsoleTextAttribute(hConsole, 0x000f);
 
 				printf("|");
-			}
-
 		}
 		printf("\n");
 	}
@@ -102,24 +174,24 @@ void printPoint(int **matrix, int *mActual, int *nActual, int mOld, int nOld) {
 }
 
 //Posun bodu dle stisknute klavesy, s ochranou proti vstupu mimo oblast hraciho pole
-void moveNumber(int **matrix, int m, int n, char d, int *mActual, int *nActual) {
+void moveNumber(int **matrix, int m, int n, int d, int *mActual, int *nActual) {
 	int mOld = *mActual, nOld = *nActual;
-	if (d == 'u' && *mActual - 1 >= 0) {
+	if (d == 1 && *mActual - 1 >= 0) {
 		(*mActual)--;
 		printPoint(matrix, mActual, nActual, mOld, nOld);
 	}
 
-	if (d == 'd' && *mActual + 1 < m) {
+	if (d == 2 && *mActual + 1 < m) {
 		(*mActual)++;
 		printPoint(matrix, mActual, nActual, mOld, nOld);
 	}
 
-	if (d == 'l' && *nActual - 1 >= 0) {
+	if (d == 3 && *nActual - 1 >= 0) {
 		(*nActual)--;
 		printPoint(matrix, mActual, nActual, mOld, nOld);
 	}
 
-	if (d == 'r' && *nActual + 1 < n) {
+	if (d == 4 && *nActual + 1 < n) {
 		(*nActual)++;
 		printPoint(matrix, mActual, nActual, mOld, nOld);
 	}
